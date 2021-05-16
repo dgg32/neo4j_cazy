@@ -1,0 +1,103 @@
+neo4j
+w4gn3r
+
+
+LOAD CSV WITH HEADERS FROM 'file:///taxon.csv' AS row MERGE (t:taxon {name: row.name, rank: row.rank, taxid: row.taxid});
+
+LOAD CSV WITH HEADERS FROM 'file:///cazy.csv' AS row MERGE (c:cazy {name: row.name, activities: row.activities, clan: row.clan, mechanism: row.mechanism, catalytic: row.catalytic});
+
+LOAD CSV WITH HEADERS FROM 'file:///ec_final.csv' AS row MERGE (e:ec {name: row.name, sysname: row.sysname, reaction: row.reaction});
+
+CREATE CONSTRAINT ON (t:taxon) ASSERT t.name IS UNIQUE;
+CREATE CONSTRAINT ON (c:cazy) ASSERT c.name IS UNIQUE;
+CREATE CONSTRAINT ON (e:ec) ASSERT e.name IS UNIQUE;
+
+LOAD CSV WITH HEADERS FROM 'file:///connections.csv' AS row MERGE (f1:taxon {name: row.from}) MERGE (f2:taxon {name: row.to}) MERGE (f1)-[r:has_taxon]->(f2);
+
+LOAD CSV WITH HEADERS FROM 'file:///has_cazy.csv' AS row MERGE (f1:taxon {name: row.from}) MERGE (f2:cazy {name: row.to}) MERGE (f1)-[r:has_cazy {amount: row.amount}]->(f2);
+
+LOAD CSV WITH HEADERS FROM 'file:///cazy_ec.csv' AS row MERGE (f1:cazy {name: row.from}) MERGE (f2:ec {name: row.to}) MERGE (f1)-[r:has_ec]->(f2);
+
+
+MATCH (n) DETACH DELETE n;
+
+DROP CONSTRAINT ON ( ec:ec ) ASSERT (ec.name) IS UNIQUE;
+DROP CONSTRAINT ON ( cazy:cazy ) ASSERT (cazy.name) IS UNIQUE;
+DROP CONSTRAINT ON ( taxon:taxon ) ASSERT (taxon.name) IS UNIQUE;
+
+
+MATCH p=(t:taxon) -[:has_taxon]-> (t1:taxon) WHERE t.name="Formosa" RETURN p;
+
+
+MATCH (t0:taxon {name:"Formosa"})-[r0:has_taxon]->(t1:taxon)-[r:has_cazy]->(c:cazy)<-[r1:has_cazy]-(t2:taxon {name: "Formosa agariphila KMM 3901"}) 
+RETURN t1.name, COUNT(DISTINCT c) as shared_cazy ORDER BY shared_cazy DESC
+
+
+MATCH (t1:taxon)-[r:has_cazy]->(c:cazy)<-[r1:has_cazy]-(t2:taxon {name: "Formosa agariphila KMM 3901"}) 
+RETURN t1.name, COUNT(DISTINCT c) as shared_cazy ORDER BY shared_cazy DESC
+
+
+
+
+MATCH (t1:taxon)-[r:has_cazy]->(c:cazy)<-[r1:has_cazy]-(t2:taxon {name: "Formosa agariphila KMM 3901"}) WHERE c.name CONTAINS 'GH'
+RETURN t1.name, COUNT(DISTINCT c) as shared_cazy ORDER BY shared_cazy DESC
+
+
+MATCH (t0:taxon {name:"Formosa"})-[r0:has_taxon]->(t1:taxon)-[r:has_cazy]->(c:cazy)<-[r1:has_cazy]-(t2:taxon {name: "Formosa agariphila KMM 3901"}) WHERE c.name CONTAINS 'GH'
+RETURN t1.name, COUNT(DISTINCT c) as shared_cazy ORDER BY shared_cazy DESC
+
+
+MATCH (t0:taxon {name:"Formosa"})-[r0:has_taxon*1..3]->(t1:taxon)-[r:has_cazy]->(c:cazy) 
+WHERE NOT t1.name="Formosa agariphila KMM 3901" 
+WITH COLLECT(DISTINCT c) AS filter_list 
+MATCH (target:taxon {name:"Formosa agariphila KMM 3901"})-[r1:has_cazy]->(c1:cazy) 
+WHERE NOT c1 IN filter_list RETURN c1.name, c1.activities, r1.amount
+ORDER BY c1.name
+
+
+MATCH p = (e:ec) <-[r:has_ec]- (c:cazy) <- [r1:has_cazy]-(t:taxon) <-[r2*1..9]-(t1:taxon {rank: "class"}) WHERE e.reaction CONTAINS "kappa-carrageenans" RETURN DISTINCT(t1.name)
+
+query getTaxon {
+	taxons (where: { name: "Acetivibrio saccincola GGR1" }) {
+    name
+    rank
+    cazys {
+      name
+      clan
+    }
+  }
+}
+
+
+query getSons {
+	taxons (where: { name: "Escherichia" }) {
+    name
+    sons {
+      name
+      taxid
+    }
+  }
+}
+
+
+
+# Write your query or mutation here
+query getTaxon {
+	taxons (where: { taxid: "329726" }) {
+    name
+    rank
+    taxid
+    cazys {
+      name
+      clan
+    }
+  }
+}
+
+
+query getTaxon {
+	taxons (where: { name: "Acetivibrio saccincola GGR1" }) {
+    name
+    cazys {name, amount}
+  }
+}
