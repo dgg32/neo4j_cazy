@@ -24,6 +24,7 @@ Nodejs
 
 # Run
 
+The Jupyter notebook contains the codes that generate all the necessary CSVs for Neo4j for this project.
 
 ## Authors
 
