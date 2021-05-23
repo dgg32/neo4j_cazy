@@ -8,11 +8,18 @@ const typeDefs = `
         rank: String
         taxid: String
         sons: [taxon] @relationship(type: "has_taxon", direction: OUT)
+        genomes: [genome]  @cypher(statement: """
+        MATCH (this) -[r1:has_taxon*1..10]-> (t:taxon) -[r2:has_genome]-> (g:genome)
+        RETURN g
+       """)
+    }
+
+    type genome {
+        name: String
         cazys: [DataPoint] @cypher(statement: """
-         MATCH (this) -[r:has_cazy]-> (c:cazy)
-         WHERE c.name CONTAINS 'GH'
-         RETURN {name: c.name, amount: r.amount}
-        """)
+        MATCH (this) -[r:has_cazy]-> (c:cazy)
+        RETURN {name: c.name, amount: r.amount}
+       """)
     }
 
     type DataPoint {
@@ -26,7 +33,7 @@ const typeDefs = `
         clan: String
         mechanism: String
         catalytic: String
-        taxons: [taxon] @relationship(type: "has_cazy", direction: IN)
+        genomes: [genome] @relationship(type: "has_cazy", direction: IN)
         ecs: [ec] @relationship(type: "has_ec", direction: OUT)
     }
 
@@ -34,25 +41,18 @@ const typeDefs = `
         name: String
         cazys: [cazy] @relationship(type: "has_ec", direction: IN)
     }
-
-
 `;
 
 const driver = neo4j.driver(
     "bolt://localhost:7687",
-    neo4j.auth.basic("neo4j", "w4gn3r")
+    neo4j.auth.basic("neo4j", "your_cazy_database_password")
 );
 
-
 const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
-//const schema = makeAugmentedSchema({ typeDefs });
-
 
 const server = new ApolloServer({
     schema: neoSchema.schema,
-    //schema: schema,
     context: ({ req }) => ({ req }),
-    //context: { driver }
 });
 
 server.listen(4000).then(() => console.log("Online"));
