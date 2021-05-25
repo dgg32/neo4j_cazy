@@ -24,7 +24,12 @@ Nodejs
 
 # Run
 
-The Jupyter notebook contains the codes that generate all the necessary CSVs for Neo4j for this project.
+Download the raw data with the two scripts in crawler/
+
+Both generate json output in the stdout. So please redirect their results into two Json file.
+
+
+The Jupyter notebook contains the codes that generate all the necessary CSVs for Neo4j from the two Json files for this project.
 
 ## Authors
 
