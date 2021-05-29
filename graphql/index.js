@@ -45,7 +45,7 @@ const typeDefs = `
 
 const driver = neo4j.driver(
     "bolt://localhost:7687",
-    neo4j.auth.basic("neo4j", "your_cazy_database_password")
+    neo4j.auth.basic("neo4j", "[your_neo4j_password]")
 );
 
 const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
