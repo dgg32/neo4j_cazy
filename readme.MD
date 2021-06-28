@@ -3,7 +3,7 @@
 # Introduction
 
 
-This repository contains code and data for my article "Neo4j for CAZy".
+This repository contains code and data for my article "[Neo4j for CAZy](https://towardsdatascience.com/graph-database-graphql-and-machine-learning-for-carbohydrate-active-enzymes-dba8500b45cf)".
 
 1. The convert.ipynb are for data processing and analyses.
 
