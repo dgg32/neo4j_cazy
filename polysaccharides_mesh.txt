@@ -1,0 +1,56 @@
+Polysaccharides
+    Alginates
+        Alginic Acid
+    Carrageenan
+    Chitin
+        Chitosan
+    Ficoll
+    Fructans
+        Inulin
+    Fungal Polysaccharides
+    Galactans
+        Agar
+    Glucans
+        beta-Glucans 
+        Cellulose 
+        Dextrans 
+        Glycogen 
+        Icodextrin
+        Isomaltose
+        Maltose
+        Starch 
+        Trehalose
+    Glycosaminoglycans
+        Chondroitin 
+        Heparin 
+        Heparitin Sulfate 
+        Hyaluronic Acid
+        Keratan Sulfate
+    Mannans
+    Oligosaccharides
+        Disaccharides 
+        Fondaparinux
+        Oligosaccharides, Branched-Chain
+        Trisaccharides 
+    Pectins
+        Rhamnogalacturonans
+    Pentosan Sulfuric Polyester
+    Plant Gums
+        Chewing Gum 
+        Gum Arabic
+        Karaya Gum
+        Tragacanth
+    Plant Mucilage
+    Polysaccharides, Bacterial
+        Bambermycins
+        Lipopolysaccharides 
+        Peptidoglycan
+        Prebiotics
+        Prodigiozan
+        Teichoic Acids
+    Proteoglycans
+        Chondroitin Sulfate Proteoglycans 
+        Heparan Sulfate Proteoglycans
+        Small Leucine-Rich Proteoglycans 
+    Sepharose
+    Xylans
